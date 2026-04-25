@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const WatchProgress = require('../models/WatchProgress');
+
 
 exports.getProfile = async (req, res) => {
 res.json({ user: req.user });
