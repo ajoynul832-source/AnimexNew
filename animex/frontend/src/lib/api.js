@@ -1,226 +1,226 @@
-const API = 'https://animex-dhhs.onrender.com/api';
+const API = 'https://animexnew.onrender.com/api';
 
 class ApiError extends Error {
-  constructor(message, status) {
-    super(message);
-    this.status = status;
-  }
+constructor(message, status) {
+super(message);
+this.status = status;
+}
 }
 
 async function req(path, opts = {}) {
-  const token =
-    typeof window !== 'undefined'
-      ? localStorage.getItem('animex_token')
-      : null;
+const token =
+typeof window !== 'undefined'
+? localStorage.getItem('animex_token')
+: null;
 
-  const res = await fetch(`${API}${path}`, {
-    ...opts,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token
-        ? {
-            Authorization: `Bearer ${token}`
-          }
-        : {}),
-      ...opts.headers
-    }
-  });
+const res = await fetch(`${API}${path}`, {
+...opts,
+headers: {
+'Content-Type': 'application/json',
+...(token
+? {
+Authorization: `Bearer ${token}`
+}
+: {}),
+...opts.headers
+}
+});
 
-  const data = await res.json().catch(() => ({}));
+const data = await res.json().catch(() => ({}));
 
-  if (!res.ok) {
-    throw new ApiError(
-      data.error || 'Request failed',
-      res.status
-    );
-  }
+if (!res.ok) {
+throw new ApiError(
+data.error || 'Request failed',
+res.status
+);
+}
 
-  return data;
+return data;
 }
 
 const post = (p, b, o) =>
-  req(p, {
-    method: 'POST',
-    body: JSON.stringify(b),
-    ...o
-  });
+req(p, {
+method: 'POST',
+body: JSON.stringify(b),
+...o
+});
 
 const put = (p, b, o) =>
-  req(p, {
-    method: 'PUT',
-    body: JSON.stringify(b),
-    ...o
-  });
+req(p, {
+method: 'PUT',
+body: JSON.stringify(b),
+...o
+});
 
 const del = (p, o) =>
-  req(p, {
-    method: 'DELETE',
-    ...o
-  });
+req(p, {
+method: 'DELETE',
+...o
+});
 
 export const animeApi = {
-  getHome: () =>
-    req('/anime/home'),
+getHome: () =>
+req('/anime/home'),
 
-  getSchedule: (date) =>
-    req(
-      `/anime/schedule${
-        date ? `?date=${date}` : ''
-      }`
-    ),
+getSchedule: (date) =>
+req(
+`/anime/schedule${
+date ? `?date=${date}` : ''
+}`
+),
 
-  getInfo: (id) =>
-    req(`/anime/info/${id}`),
+getInfo: (id) =>
+req(`/anime/info/${id}`),
 
-  getEpisodes: (id) =>
-    req(`/anime/episodes/${id}`),
+getEpisodes: (id) =>
+req(`/anime/episodes/${id}`),
 
-  getSources: (
-    epId,
-    srv = 'hd-1',
-    cat = 'sub'
-  ) =>
-    req(
-      `/anime/sources?episodeId=${epId}&server=${encodeURIComponent(
-        srv
-      )}&category=${cat}`
-    ),
+getSources: (
+epId,
+srv = 'hd-1',
+cat = 'sub'
+) =>
+req(
+`/anime/sources?episodeId=${epId}&server=${encodeURIComponent(
+srv
+)}&category=${cat}`
+),
 
-  getTopAiring: (p = 1) =>
-    req(`/anime/top-airing?page=${p}`),
+getTopAiring: (p = 1) =>
+req(`/anime/top-airing?page=${p}`),
 
-  getMostPopular: (p = 1) =>
-    req(`/anime/most-popular?page=${p}`),
+getMostPopular: (p = 1) =>
+req(`/anime/most-popular?page=${p}`),
 
-  getMostFavorite: (p = 1) =>
-    req(`/anime/most-favorite?page=${p}`),
+getMostFavorite: (p = 1) =>
+req(`/anime/most-favorite?page=${p}`),
 
-  getMovies: (p = 1) =>
-    req(`/anime/movies?page=${p}`),
+getMovies: (p = 1) =>
+req(`/anime/movies?page=${p}`),
 
-  getTvSeries: (p = 1) =>
-    req(`/anime/tv-series?page=${p}`),
+getTvSeries: (p = 1) =>
+req(`/anime/tv-series?page=${p}`),
 
-  getNewSeason: (p = 1) =>
-    req(`/anime/new-season?page=${p}`),
+getNewSeason: (p = 1) =>
+req(`/anime/new-season?page=${p}`),
 
-  getCompleted: (p = 1) =>
-    req(`/anime/completed?page=${p}`),
+getCompleted: (p = 1) =>
+req(`/anime/completed?page=${p}`),
 
-  getOngoing: (p = 1) =>
-    req(`/anime/ongoing?page=${p}`),
+getOngoing: (p = 1) =>
+req(`/anime/ongoing?page=${p}`),
 
-  getByGenre: (g, p = 1) =>
-    req(
-      `/anime/genre/${encodeURIComponent(
-        g
-      )}?page=${p}`
-    ),
+getByGenre: (g, p = 1) =>
+req(
+`/anime/genre/${encodeURIComponent(
+g
+)}?page=${p}`
+),
 
-  getAzList: (l = 'all', p = 1) =>
-    req(
-      `/anime/az-list?letter=${l}&page=${p}`
-    ),
+getAzList: (l = 'all', p = 1) =>
+req(
+`/anime/az-list?letter=${l}&page=${p}`
+),
 
-  getStats: (pid) =>
-    req(`/anime/stats/${pid}`),
+getStats: (pid) =>
+req(`/anime/stats/${pid}`),
 
-  incrementView: (pid, aid) =>
-    post(
-      `/anime/stats/${pid}/view`,
-      { animeId: aid }
-    ),
+incrementView: (pid, aid) =>
+post(
+`/anime/stats/${pid}/view`,
+{ animeId: aid }
+),
 
-  setReaction: (pid, r, aid) =>
-    post(
-      `/anime/stats/${pid}/react`,
-      {
-        reaction: r,
-        animeId: aid
-      }
-    )
+setReaction: (pid, r, aid) =>
+post(
+`/anime/stats/${pid}/react`,
+{
+reaction: r,
+animeId: aid
+}
+)
 };
 
 export const searchApi = {
-  search: (
-    kw,
-    p = 1,
-    filters = {}
-  ) =>
-    req(
-      `/search?keyword=${encodeURIComponent(
-        kw
-      )}&page=${p}&${new URLSearchParams(
-        filters
-      )}`
-    ),
+search: (
+kw,
+p = 1,
+filters = {}
+) =>
+req(
+`/search?keyword=${encodeURIComponent(
+kw
+)}&page=${p}&${new URLSearchParams(
+filters
+)}`
+),
 
-  getSuggestions: (kw) =>
-    req(
-      `/search/suggestions?keyword=${encodeURIComponent(
-        kw
-      )}`
-    )
+getSuggestions: (kw) =>
+req(
+`/search/suggestions?keyword=${encodeURIComponent(
+kw
+)}`
+)
 };
 
 export const authApi = {
-  register: (d) =>
-    post('/auth/register', d),
+register: (d) =>
+post('/auth/register', d),
 
-  login: (d) =>
-    post('/auth/login', d),
+login: (d) =>
+post('/auth/login', d),
 
-  getMe: () =>
-    req('/auth/me'),
+getMe: () =>
+req('/auth/me'),
 
-  changePassword: (d) =>
-    put('/auth/change-password', d)
+changePassword: (d) =>
+put('/auth/change-password', d)
 };
 
 export const userApi = {
-  getProfile: () =>
-    req('/user/profile'),
+getProfile: () =>
+req('/user/profile'),
 
-  getHistory: () =>
-    req('/user/history'),
+getHistory: () =>
+req('/user/history'),
 
-  addToHistory: (d) =>
-    post('/user/history', d),
+addToHistory: (d) =>
+post('/user/history', d),
 
-  removeFromHistory: (id) =>
-    del(`/user/history/${id}`),
+removeFromHistory: (id) =>
+del(`/user/history/${id}`),
 
-  clearHistory: () =>
-    del('/user/history'),
+clearHistory: () =>
+del('/user/history'),
 
-  getWatchlist: () =>
-    req('/user/watchlist'),
+getWatchlist: () =>
+req('/user/watchlist'),
 
-  addToWatchlist: (d) =>
-    post('/user/watchlist', d),
+addToWatchlist: (d) =>
+post('/user/watchlist', d),
 
-  removeFromWatchlist: (id) =>
-    del(`/user/watchlist/${id}`),
+removeFromWatchlist: (id) =>
+del(`/user/watchlist/${id}`),
 
-  checkWatchlist: (id) =>
-    req(
-      `/user/watchlist/check/${id}`
-    )
+checkWatchlist: (id) =>
+req(
+`/user/watchlist/check/${id}`
+)
 };
 
 // Extend animeApi with missing endpoints (Zoro port)
 Object.assign(animeApi, {
-  getLatestSubbed: (p = 1) =>
-    req(`/anime/latest/subbed?page=${p}`),
+getLatestSubbed: (p = 1) =>
+req(`/anime/latest/subbed?page=${p}`),
 
-  getLatestDubbed: (p = 1) =>
-    req(`/anime/latest/dubbed?page=${p}`),
+getLatestDubbed: (p = 1) =>
+req(`/anime/latest/dubbed?page=${p}`),
 
-  getLatestChinese: (p = 1) =>
-    req(`/anime/latest/chinese?page=${p}`),
+getLatestChinese: (p = 1) =>
+req(`/anime/latest/chinese?page=${p}`),
 
-  getSubCategory: (id, p = 1) =>
-    req(`/anime/sub-category/${encodeURIComponent(id)}?page=${p}`),
+getSubCategory: (id, p = 1) =>
+req(`/anime/sub-category/${encodeURIComponent(id)}?page=${p}`),
 });
 
 export { ApiError };
