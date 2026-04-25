@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/swc-android-arm64": "^13.2.4",
     "clsx": "^2.1.1",
     "hls.js": "^1.5.13",
     "lucide-react": "^0.395.0",
